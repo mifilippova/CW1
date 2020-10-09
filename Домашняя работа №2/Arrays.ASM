@@ -1,4 +1,4 @@
-; Вариант 4.
+; Variant 4.
 format PE console
 
 entry start
@@ -25,18 +25,20 @@ section '.data' data readable writable
 
 section '.code' code readable executable
 start:
-; Ввод массива А.
+; Input array A.
         call VectorInput
 
-; Формирование массива В по правилу: 1 - положительные, 0 - 0, -1 - отрицательные.
+; Creating the array B according to rule: 1 - for positive elements in A,
+;                                         0 - for 0 in A
+;                                        -1 - for negative elements in A.
         call VectorChange
 
-; Вывод массива А.
+; Output array A.
         push strVectA
         call [printf]
         call VectorOutA
 
-; Вывод массива В.
+; Output array B.
         push strVectB
         call [printf]
         call VectorOutB
@@ -47,7 +49,7 @@ finish:
          push NULL
          call [ExitProcess]
 
-; Ввод числа элементов.
+; Input the number of elements.
 VectorInput:
         push strVecSize
         call [printf]
@@ -59,8 +61,8 @@ VectorInput:
         add esp, 8
 
         mov eax, [vec_size]
-        ; Проверяем, корректно ли введеное значение.
-        ; Число должно принадлежать от 1 до 100.
+        ; Checking that the entered value is correct.
+        ; The number must be between 0 and 100 (not including).
         cmp eax, 0
         jle failSize
         cmp eax, 100
@@ -70,7 +72,7 @@ VectorInput:
         jl getVectorA
 
 
-; Оповещает пользователя о некооректном значении введенного числа.
+;Warns about incorrect value,
 failSize:
         push [vec_size]
         push strIncorSize
@@ -78,7 +80,7 @@ failSize:
         jmp finish
 
 
-; Ввод массива А.
+; Input array A.
 getVectorA:
 
         xor ecx, ecx
@@ -86,12 +88,12 @@ getVectorA:
 
 getVectorLoop:
         mov [tmp], ebx
-        ; Сравниваем порядок текущего элемента, с числом элементов.
-        ; Есди величины равны, то заканчиваем ввод.
+        ; Compare the number of item with the number of elements.
+        ; If values are equal, stop the input of array A.
         cmp ecx, [vec_size]
         jge endInputVector
 
-        ; Ввод элемента.
+        ; Input of item.
         mov [i], ecx
         push ecx
         push strVecElemI
@@ -108,35 +110,35 @@ getVectorLoop:
         add ebx, 4
         jmp getVectorLoop
 
-; Окончание ввода массива А.
+; End of input items of array A.
 endInputVector:
         ret
 
-; Формирование массива В.
+; Forming array B.
 VectorChange:
         xor ecx, ecx
         mov ebx, vec_a
         mov edx, vec_b
 
-; Цикл для формирвоания массива В.
+;Loop for array B formation.
 formNewVecByRuleLoop:
 
         cmp ecx, [vec_size]
         je endFormNewVec
 
         mov eax, [ebx]
-        ; Если элемент массива А положителен,
-        ; то соответственный элемент массива В равен 1.
+        ; If the item in A is positive
+        ; the corresponding item in B is 1.
         cmp eax, 0
         jg rule1
 
-        ;Если элемент иассива А отрицателен,
-        ;то соответствующий элемент массива B равен -1.
+        ;If the item in A is negative
+        ;the corresponding item in B is -1.
         cmp eax, 0
         jl rule2
 
-        ;Если элемент массива A равен 0,
-        ;то соответствующий элемент массива В равен 0.
+        ;If the item in A is 0,
+        ;the corresponding item in B is 0.
         cmp eax, 0
         je rule3
 
@@ -167,19 +169,19 @@ rule3:
            jmp formNewVecByRuleLoop
 
 
-; Выход из цикла формироания массива В.
+;Exit from B formation loop.
 endFormNewVec:
         ret
 
 
-; Вывод массива А.
+; Array A output.
 VectorOutA:
 
         mov [tmpStack], esp
         xor ecx, ecx
         mov ebx, vec_a
 
-; Цикл для вывода массива.
+; Loop for array output.
 putVecLoop:
         mov [tmp], ebx
         cmp ecx, [vec_size]
@@ -198,12 +200,12 @@ putVecLoop:
         add ebx, 4
         jmp putVecLoop
 
-; Выход из цикла вывода массива.
+; Exit from the loop of output.
 endOutputVector:
         mov esp, [tmpStack]
         ret
 
-; Вывод массива В.
+; Array B output.
 VectorOutB:
 
         mov [tmpStack], esp
