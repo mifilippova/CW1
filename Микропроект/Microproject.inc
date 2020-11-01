@@ -1,11 +1,11 @@
-; Вывод значений.
+; Р’С‹РІРѕРґ Р·РЅР°С‡РµРЅРёР№.
 macro Print [args] {
   reverse
     push args
   common
     call [printf]
 }
-; Ввод значений.
+; Р’РІРѕРґ Р·РЅР°С‡РµРЅРёР№.
 macro Scan [args] {
   reverse
     push args
@@ -13,33 +13,33 @@ macro Scan [args] {
     call [scanf]
 }
 
-; Ввод дроби.
+; Р’РІРѕРґ РґСЂРѕР±Рё.
 macro GetFraction num, den {
  local getFraction, outOfRange,endGetFraction
  getFraction:
-      ; Ввод числителя.
+      ; Р’РІРѕРґ С‡РёСЃР»РёС‚РµР»СЏ.
       Print strInputNumerator
       Scan strScanInt, num
 
-      ; Проверка чилителя на корректность.
+      ; РџСЂРѕРІРµСЂРєР° С‡РёСЃР»РёС‚РµР»СЏ РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ.
       cmp [num], 1000000
       jg outOfRange
 
       cmp [num], -1000000
       jl outOfRange
 
-      ; Ввод знаменателя.
+      ; Р’РІРѕРґ Р·РЅР°РјРµРЅР°С‚РµР»СЏ
       Print strInputDenominator
       Scan strScanInt, den
 
-      ; Проверка знаменателя на корректность.
+      ; РџСЂРѕРІРµСЂРєР° Р·РЅР°РјРµРЅР°С‚РµР»СЏ РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ.
       cmp [den], 1000000
       jg outOfRange
 
       cmp [den], -1000000
       jl outOfRange
 
-        ; Проверка на неравенство знаменателя 0.
+        ; РџСЂРѕРІРµСЂРєР° РЅР° РЅРµСЂР°РІРµРЅСЃС‚РІРѕ Р·РЅР°РјРµРЅР°С‚РµР»СЏ 0.
         cmp [den], 0
         jne endGetFraction
 
@@ -58,25 +58,25 @@ outOfRange:
 
 }
 
-; Ввод одного комплексного числа.
+; Р’РІРѕРґ РѕРґРЅРѕРіРѕ РєРѕРјРїР»РµРєСЃРЅРѕРіРѕ С‡РёСЃР»Р°.
 macro CNInputMacro strInput, n_re_num, n_re_den, n_im_num, n_im_den {
       Print strInput
       Print strInputRe
-      ; Ввод действительной части.
+     ; Р’РІРѕРґ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕР№ С‡Р°СЃС‚Рё. 
       GetFraction n_re_num, n_re_den
 
       Print strInputIm
-      ; Ввод мнимой части.
+      ; Р’РІРѕРґ РјРЅРёРјРѕР№ С‡Р°СЃС‚Рё.
       GetFraction n_im_num, n_im_den
 }
 
-;Сокращение дроби.
+;РЎРѕРєСЂР°С‰РµРЅРёРµ РґСЂРѕР±Рё. 
 macro ReduceFraction first, second{
 local startNOD,negB, negA, negBB, @greaterB, NODLoop, negDivA, negDivB, negDivBB, reduceFraction, redIfZeroNum, endNOD
 startNOD:
-        ; НОД - это целое натуральное число,
-        ; поэтому проверяем числа на отрицательность и на равенство 0,
-        ; чтобы искать НОД для 2-х положительных чисел.
+        ; РќРћР” - СЌС‚Рѕ С†РµР»РѕРµ РЅР°С‚СѓСЂР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ,
+        ; РїРѕСЌС‚РѕРјСѓ РїСЂРѕРІРµСЂСЏРµРј С‡РёСЃР»Р° РЅР° РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕСЃС‚СЊ Рё РЅР° СЂР°РІРµРЅСЃС‚РІРѕ 0,
+        ; С‡С‚РѕР±С‹ РёСЃРєР°С‚СЊ РќРћР” РґР»СЏ 2-С… РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹С… С‡РёСЃРµР». 
         cmp [first],0
         je redIfZeroNum
 
@@ -99,7 +99,7 @@ startNOD:
               neg ebx
               jmp NODLoop
 
-; Алгоритм Евклида.
+; РђР»РіРѕСЂРёС‚Рј Р•РІРєР»РёРґР°.
 NODLoop:
         cmp eax, ebx
         je reduceFraction
@@ -113,15 +113,15 @@ NODLoop:
 
         jmp NODLoop
 
-; Сокращение числителя и знаменателя на их НОД.
+; РЎРѕРєСЂР°С‰РµРЅРёРµ С‡РёСЃР»РёС‚РµР»СЏ Рё Р·РЅР°РјРµРЅР°С‚РµР»СЏ РЅР° РёС… РќРћР”. 
 reduceFraction:
         mov [d], eax
         Print strEmpty
 
-        ;поделить на d оба числа
-        ;положительное число делится адекватно,
-        ;отрицательное нужно сделать положительным, а затем
-        ;поменяь знакрезультата.
+        ;РїРѕРґРµР»РёС‚СЊ РЅР° d РѕР±Р° С‡РёСЃР»Р°
+        ;РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ С‡РёСЃР»Рѕ РґРµР»РёС‚СЃСЏ Р°РґРµРєРІР°С‚РЅРѕ,
+        ;РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹Рј, Р° Р·Р°С‚РµРј
+        ;РїРѕРјРµРЅСЏС‚СЊ Р·РЅР°Рє СЂРµР·СѓР»СЊС‚Р°С‚Р°.   
         cmp [first], 0
         jl negDivA
            mov eax, [first]
@@ -161,8 +161,8 @@ reduceFraction:
               neg eax
               mov [second], eax
               jmp endNOD
-; В случае равенства числителя дроби 0,
-; присвоим знаменателю значение 0.
+; Р’ СЃР»СѓС‡Р°Рµ СЂР°РІРµРЅСЃС‚РІР° С‡РёСЃР»РёС‚РµР»СЏ РґСЂРѕР±Рё 0,
+; РїСЂРёСЃРІРѕРёРј Р·РЅР°РјРµРЅР°С‚РµР»СЋ Р·РЅР°С‡РµРЅРёРµ 0. 
 redIfZeroNum:
          mov [second], 1
 
@@ -171,9 +171,9 @@ endNOD:
 }
 
 
-; Сложение дробей.
+; РЎР»РѕР¶РµРЅРёРµ РґСЂРѕР±РµР№
 macro AddFractions a, b, c, d, num, den{
-     ; Расчет числителя.
+     ; Р Р°СЃС‡РµС‚ С‡РёСЃР»РёС‚РµР»СЏ.
      mov eax,[a]
      imul eax, [d]
 
@@ -183,35 +183,35 @@ macro AddFractions a, b, c, d, num, den{
      add eax, ebx
      mov [num], eax
 
-     ; Расчет знаменателя.
+     ; Р Р°СЃС‡РµС‚ Р·РЅР°РјРµРЅР°С‚РµР»СЏ.
      mov eax, [b]
      imul eax, [d]
      mov [den], eax
 }
 
-; Сложение комплексных чисел.
+; РЎР»РѕР¶РµРЅРёРµ РєРѕРјРїР»РµРєСЃРЅС‹С… С‡РёСЃРµР». 
 macro CNAddMacro{
-     ; Сложение действительных частей.
+     ; РЎР»РѕР¶РµРЅРёРµ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅС‹С… С‡Р°СЃС‚РµР№. 
      AddFractions a_re_num, a_re_den, b_re_num, b_re_den, c_re_num, c_re_den
 
      ReduceFraction c_re_num, c_re_den
 
-     ; Сложение мнимых частей.
+     ; РЎР»РѕР¶РµРЅРёРµ РјРЅРёРјС‹С… С‡Р°СЃС‚РµР№.
      AddFractions a_im_num, a_im_den, b_im_num, b_im_den, c_im_num, c_im_den
 
      ReduceFraction c_im_num, c_im_den
 
 }
-; Отрицание числа.
+; РћС‚СЂРёС†Р°РЅРёРµ С‡РёСЃР»Р°.
 macro negNum num{
      mov eax, [num]
      neg eax
      mov [num], eax
 }
 
-; Вычитание комплексных чисел.
+; Р’С‹С‡РёС‚Р°РЅРёРµ РєРѕРјРїР»РµРєСЃРЅС‹С… С‡РёСЃРµР».
 macro CNSubMacro{
-     ; - это тот же плюс, только с отрицанием b_re_num и b_im_num
+     ; - СЌС‚Рѕ С‚РѕС‚ Р¶Рµ РїР»СЋСЃ, С‚РѕР»СЊРєРѕ СЃ РѕС‚СЂРёС†Р°РЅРёРµРј b_re_num Рё b_im_num
      negNum b_re_num
      negNum b_im_num
 
@@ -221,13 +221,13 @@ macro CNSubMacro{
      negNum b_im_num
 }
 
-; Присвоить secondValue значение firstValue.
+; РџСЂРёСЃРІРѕРёС‚СЊ secondValue Р·РЅР°С‡РµРЅРёРµ firstValue.
 macro changeValues firstValue, secondValue{
       mov eax, [firstValue]
       mov [secondValue], eax
 }
 
-;Присваиваем одному кумплексному числу значение другого.
+;РџСЂРёСЃРІР°РёРІР°РµРј РѕРґРЅРѕРјСѓ РєРѕРјРїР»РµРєСЃРЅРѕРјСѓ С‡РёСЃР»Сѓ Р·РЅР°С‡РµРЅРёРµ РґСЂСѓРіРѕРіРѕ. 
 macro modify s_re_num, s_re_den, s_im_num, s_im_den, d_re_num, d_re_den, d_im_num, d_im_den {
     changeValues s_re_num, d_re_num
     changeValues s_re_den, d_re_den
@@ -235,18 +235,18 @@ macro modify s_re_num, s_re_den, s_im_num, s_im_den, d_re_num, d_re_den, d_im_nu
     changeValues s_im_den, d_im_den
 }
 
-; Умножение комплексных чисел.
+; РЈРјРЅРѕР¶РµРЅРёРµ РєРѕРјРїР»РµРєСЃРЅС‹С… С‡РёСЃРµР». 
 macro CNMulMacro{
-    ; Сохраним значения чисел a, b в x, y, чтобы потом можно было их восстановить
-    ; В силу реализации сложения, мы можем оперировать только a и b
-    ; Можно было, конечно, добавить параметры в сложение,
-    ; но показалось неразумным нагромождать операции сложения и вычитания.
+     ; РЎРѕС…СЂР°РЅРёРј Р·РЅР°С‡РµРЅРёСЏ С‡РёСЃРµР» a, b РІ x, y, С‡С‚РѕР±С‹ РїРѕС‚РѕРј РјРѕР¶РЅРѕ Р±С‹Р»Рѕ РёС… РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ
+    ; Р’ СЃРёР»Сѓ СЂРµР°Р»РёР·Р°С†РёРё СЃР»РѕР¶РµРЅРёСЏ, РјС‹ РјРѕР¶РµРј РѕРїРµСЂРёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ a Рё b
+    ; РњРѕР¶РЅРѕ Р±С‹Р»Рѕ, РєРѕРЅРµС‡РЅРѕ, РґРѕР±Р°РІРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РІ СЃР»РѕР¶РµРЅРёРµ,
+    ; РЅРѕ РїРѕРєР°Р·Р°Р»РѕСЃСЊ РЅРµСЂР°Р·СѓРјРЅС‹Рј РЅР°РіСЂРѕРјРѕР¶РґР°С‚СЊ РѕРїРµСЂР°С†РёРё СЃР»РѕР¶РµРЅРёСЏ Рё РІС‹С‡РёС‚Р°РЅРёСЏ.
 
-    ; Сохраняем a в x, b в y.
+    ; РЎРѕС…СЂР°РЅСЏРµРј a РІ x, b РІ y. 
     modify a_re_num, a_re_den, a_im_num, a_im_den, x_re_num, x_re_den, x_im_num, x_im_den
     modify b_re_num, b_re_den, b_im_num, b_im_den, y_re_num, y_re_den, y_im_num, y_im_den
 
-    ; Дествительная часть новых дробей.
+    ; Р”РµСЃС‚РІРёС‚РµР»СЊРЅР°СЏ С‡Р°СЃС‚СЊ РЅРѕРІС‹С… РґСЂРѕР±РµР№.
     mov eax, [a_re_num]
     imul eax, [b_re_num]
     mov [a_re_num], eax
@@ -266,7 +266,7 @@ macro CNMulMacro{
     mov [b_re_den], eax
 
 
-    ; Мнимая часть новых дробей.
+    ; РњРЅРёРјР°СЏ С‡Р°СЃС‚СЊ РЅРѕРІС‹С… РґСЂРѕР±РµР№.
     mov eax, [x_re_num]
     imul eax, [y_im_num]
     mov [a_im_num], eax
@@ -285,20 +285,20 @@ macro CNMulMacro{
 
     CNAddMacro
 
-   ; Возвращение первоначальных значений а и b.
+  ; Р’РѕР·РІСЂР°С‰РµРЅРёРµ РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅС‹С… Р·РЅР°С‡РµРЅРёР№ Р° Рё b.
    modify x_re_num, x_re_den, x_im_num, x_im_den, a_re_num, a_re_den, a_im_num, a_im_den
    modify y_re_num, y_re_den, y_im_num, y_im_den, b_re_num, b_re_den, b_im_num, b_im_den
 }
 
-; Деление комплексных чисел.
+; Р”РµР»РµРЅРёРµ РєРѕРјРїР»РµРєСЃРЅС‹С… С‡РёСЃРµР». 
 macro CNDivMacro{
-      ; Числитель - умножение a и сопряженного к b.
+      ;  Р§РёСЃР»РёС‚РµР»СЊ - СѓРјРЅРѕР¶РµРЅРёРµ a Рё СЃРѕРїСЂСЏР¶РµРЅРЅРѕРіРѕ Рє b.
       negNum b_im_num
       CNMulMacro
       negNum b_im_num
 
-      ; Знаменатель сумма квадратов действительной и мнимой части b.
-      ; Проверяем, не равен ли b 0, в таком случае, деление на 0 невозможно.
+      ; Р—РЅР°РјРµРЅР°С‚РµР»СЊ СЃСѓРјРјР° РєРІР°РґСЂР°С‚РѕРІ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕР№ Рё РјРЅРёРјРѕР№ С‡Р°СЃС‚Рё b.
+      ; РџСЂРѕРІРµСЂСЏРµРј, РЅРµ СЂР°РІРµРЅ Р»Рё b 0, РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ, РґРµР»РµРЅРёРµ РЅР° 0 РЅРµРІРѕР·РјРѕР¶РЅРѕ.
       cmp [b_re_num], 0
       je divByZero
 
@@ -323,7 +323,7 @@ macro CNDivMacro{
 
       AddFractions x_re_num, x_re_den, y_re_num, y_re_den, x_im_num, x_im_den
 
-      ; Делим чиситель на знаменатель
+       ; Р”РµР»РёРј С‡РёСЃРёС‚РµР»СЊ РЅР° Р·РЅР°РјРµРЅР°С‚РµР»СЊ  
       mov eax, [c_re_num]
       imul eax, [x_im_den]
       mov [c_re_num], eax
@@ -340,7 +340,7 @@ macro CNDivMacro{
       imul eax, [x_im_num]
       mov [c_im_den], eax
 
-      ; Сокращаем дроби результатов.
+      ; РЎРѕРєСЂР°С‰Р°РµРј РґСЂРѕР±Рё СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
       ReduceFraction c_re_num, c_re_den
       ReduceFraction c_im_num, c_im_den
       jmp endDiv
@@ -354,7 +354,7 @@ divByZero:
 endDiv:
 }
 
-; Форматирование дроби по правилу sqn(num * den)*|num| / |den|
+; Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ РґСЂРѕР±Рё РїРѕ РїСЂР°РІРёР»Сѓ sqn(num * den)*|num| / |den| 
 macro checkFraction num, den{
 local startCheckFract,@denLess, endCheckFraction
 startCheckFract:
@@ -375,20 +375,20 @@ startCheckFract:
 endCheckFraction:
 
 }
-; Форматирование дробей комплексного числа.
+; Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ РґСЂРѕР±РµР№ РєРѕРјРїР»РµРєСЃРЅРѕРіРѕ С‡РёСЃР»Р°.
 macro formatFractions re_num, re_den, im_num, im_den{
-      ; Приводим дроби к виду sqn(num, den)*|num| / |den|
+      ; РџСЂРёРІРѕРґРёРј РґСЂРѕР±Рё Рє РІРёРґСѓ sqn(num, den)*|num| / |den|
       checkFraction re_num, re_den
       checkFraction im_num, im_den
 }
 
-; Вывод комплексного числа.
+; Р’С‹РІРѕРґ РєРѕРјРїР»РµРєСЃРЅРѕРіРѕ С‡РёСЃР»Р°
 macro outputCN re_num, re_den, im_num, im_den{
 
 local startOutputCN, negIm, endOutputCN
 
 startOutputCN:
-       ; Выбор строки формата, в зависимость от знака мнимой части.
+      ; Р’С‹Р±РѕСЂ СЃС‚СЂРѕРєРё С„РѕСЂРјР°С‚Р°, РІ Р·Р°РІРёСЃРёРјРѕСЃС‚СЊ РѕС‚ Р·РЅР°РєР° РјРЅРёРјРѕР№ С‡Р°СЃС‚Рё.
        cmp [im_num], 0
        jl negIm
            Print strCNPosIm, [re_num], [re_den], [im_num], [im_den]
@@ -403,15 +403,15 @@ startOutputCN:
 endOutputCN:
 }
 
-; Вывод результата в формате А op B = C, где A, B, C - комплексные числа,
-; а op - введенный оператор.
+; Р’С‹РІРѕРґ СЂРµР·СѓР»СЊС‚Р°С‚Р° РІ С„РѕСЂРјР°С‚Рµ Рђ op B = C, РіРґРµ A, B, C - РєРѕРјРїР»РµРєСЃРЅС‹Рµ С‡РёСЃР»Р°,
+; Р° op - РІРІРµРґРµРЅРЅС‹Р№ РѕРїРµСЂР°С‚РѕСЂ.
 macro OutputResult{
 startOutput:
-     ; Вывод первого введенного числа.
+     ; Р’С‹РІРѕРґ РїРµСЂРІРѕРіРѕ РІРІРµРґРµРЅРЅРѕРіРѕ С‡РёСЃР»Р°. 
      outputCN a_re_num, a_re_den, a_im_num, a_im_den
 
-     ; Выбор строкового представления оператора в зависимости от кода.
-     ; 43 = '+', 45 = '-', 42 = '*', 47 = '/'
+    ; Р’С‹Р±РѕСЂ СЃС‚СЂРѕРєРѕРІРѕРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРїРµСЂР°С‚РѕСЂР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РєРѕРґР°.
+     ; 43 = '+', 45 = '-', 42 = '*', 47 = '/' 
      cmp [op], 43
      jne notAddOp
          Print strOpAdd
@@ -429,9 +429,9 @@ startOutput:
             notMultOp:
                 Print strOpDiv
 endOutput:
-    ; Вывод второго введенного числа.
+      ; Р’С‹РІРѕРґ РІС‚РѕСЂРѕРіРѕ РІРІРµРґРµРЅРЅРѕРіРѕ С‡РёСЃР»Р°.
     outputCN b_re_num, b_re_den, b_im_num, b_im_den
     Print strOpEq
-    ; Вывод результата.
+   ; Р’С‹РІРѕРґ СЂРµР·СѓР»СЊС‚Р°С‚Р°.    
     outputCN c_re_num, c_re_den, c_im_num, c_im_den
 }
