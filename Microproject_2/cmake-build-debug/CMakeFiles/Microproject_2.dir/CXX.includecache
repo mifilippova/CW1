@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/admin/CLionProjects/Microproject_2/main.cpp
+iostream
+-
+pthread.h
+-
+semaphore.h
+-
+ctime
+-
+stdlib.h
+-
+stdio.h
+-
+thread
+-
+chrono
+-
+
